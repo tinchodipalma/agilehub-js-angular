@@ -13,10 +13,3 @@ $ bower install
 $ gulp serve
 ```
 4. Open http://localhost:9500/ in any browser
-```sh
-$ git clone [git-repo-url] dillinger
-$ cd dillinger
-$ npm i -d
-$ gulp build --prod
-$ NODE_ENV=production node app
-```
