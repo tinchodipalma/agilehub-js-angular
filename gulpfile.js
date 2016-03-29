@@ -50,7 +50,7 @@ gulp.task('html', function () {
 gulp.task('watch', function() {
     gulp.watch('app/**/*.js', ['lint', 'scripts']);
     gulp.watch('app/**/*.scss', ['sass']);
-    gulp.watch('*.html', ['html']);
+    gulp.watch(['*.html', 'app/**/*.html'], ['html']);
     gulp.watch('dist/**/*.*', ['livereload']);
 });
 

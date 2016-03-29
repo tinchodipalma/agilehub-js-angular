@@ -9,12 +9,12 @@
             {
                 title: 'My first todo',
                 description: 'Desc - My first todo',
-                state: 'To Do'
+                done: true
             },
             {
                 title: 'My second todo',
                 description: 'Desc - My second todo',
-                state: 'Done'
+                done: false
             }
         ]
 	}
