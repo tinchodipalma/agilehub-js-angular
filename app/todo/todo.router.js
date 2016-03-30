@@ -11,10 +11,22 @@
 
 		// Definimos los estados (y la ruta que tendra cada uno)
 		$stateProvider
-			.state('list', {
-				url: "/",
-				templateUrl: "/app/todo/todo.view.list.html"
-			});
+            .state('list', {
+                url: "/",
+                params: {
+                    todoObj: null
+                },
+                templateUrl: "/app/todo/todo.view.list.html",
+                controller: 'TodoListController'
+            })
+            .state('edit', {
+                url: "/edit/:id",
+                params: {
+                    todoObj: null
+                },
+                templateUrl: "/app/todo/todo.view.edit.html",
+                controller: 'TodoController'
+            });
 	}
 
 })(window, window.angular);
