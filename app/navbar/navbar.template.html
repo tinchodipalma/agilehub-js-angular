@@ -14,8 +14,8 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li ng-repeat="link in links" ng-class="{'active': link.isActive}">
-            <a href="{{link.href}}">
+        <li ng-repeat="link in links" data-ui-sref-active="active">
+            <a data-ui-sref="{{link.state}}">
                 {{link.title}}
             </a>
         </li>

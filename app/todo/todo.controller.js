@@ -4,9 +4,16 @@
 		.controller('TodoController', TodoController)
 		.controller('TodoListController', TodoListController);
 
-	TodoListController.$inject = ['$scope', '$state', '$stateParams'];
-	function TodoListController($scope, $state, $stateParams) {
-        $scope.todoList = [
+	TodoListController.$inject = ['$state', '$stateParams'];
+
+	function TodoListController($state, $stateParams) {
+
+        var vm = this;
+
+        vm.submit = submit;
+        vm.remove = remove;
+
+        vm.todoList = [
             {
                 id: 1,
                 title: 'My first todo',
@@ -21,23 +28,50 @@
             }
         ];
 
+        vm.todo = {};
+
+        function submit (form) {
+            if (form.$valid) {
+                vm.todoList.push(vm.todo);
+                vm.todo = {};
+            }
+        }
+
+        function remove (todo) {
+            vm.todoList = vm.todoList.filter(function (todoObj) {
+               return todoObj.id !== todo.id;
+            });
+        }
+
         if (!!$stateParams.todoObj) {
-            debugger;
-            for (var i = 0; i < $scope.todoList.length; i++) {
-                if ($scope.todoList[i].id === $stateParams.todoObj.id) {
-                    $scope.todoList[i] = $stateParams.todoObj;
+            for (var i = 0; i < vm.todoList.length; i++) {
+                if (vm.todoList[i].id === $stateParams.todoObj.id) {
+                    vm.todoList[i] = $stateParams.todoObj;
                     break;
                 }
             }
         }
 	}
 
-	TodoController.$inject = ['$scope', '$state', '$stateParams'];
-	function TodoController($scope, $state, $stateParams) {
+	TodoController.$inject = ['$state', '$stateParams'];
+
+	function TodoController($state, $stateParams) {
+
+        var vm = this;
+
+        vm.submit = submit;
+
         if (!$stateParams.todoObj) {
             $state.go('list');
         }
-        $scope.todo = $stateParams.todoObj;
+
+        vm.todo = $stateParams.todoObj;
+
+        function submit (form) {
+            if (form.$valid) {
+                $state.go('list', {todoObj: vm.todo});
+            }
+        }
 	}
 
 })(window, window.angular);

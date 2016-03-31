@@ -1,15 +1,14 @@
 (function(window, angular) {
 
     angular.module('todo')
-        .directive('myTodo', MyTodo);
+        .directive('myTodo', MyTodo)
+        .directive('todoForm', TodoForm);
 
     MyTodo.$inject = ['$state'];
     function MyTodo($state) {
         return {
             restric: 'EA',
-            scope: {
-                todo: '='
-            },
+            scope: false,
             link: MyTodoCompile,
             templateUrl: function(element, attributes) {
                 var type = !attributes.edit ? 'view' : 'edit';
@@ -18,12 +17,19 @@
         };
 
         function MyTodoCompile(scope, element, attrs) {
-            scope.edit = function edit(todoObj) {
-                $state.go('edit', { id: todoObj.id, todoObj: todoObj });
-            };
             scope.close = function close(todoObj) {
                 $state.go('list', { todoObj: todoObj });
             };
+        }
+    }
+
+    function TodoForm () {
+        return {
+            restrict: 'E',
+            templateUrl: '/app/todo/todo.template.form.html',
+            scope: {
+                todoForm: '=controller'
+            }
         }
     }
 

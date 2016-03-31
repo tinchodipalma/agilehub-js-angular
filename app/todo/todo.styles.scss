@@ -40,7 +40,7 @@ body {
         }
     }
 
-    .todo-edit {
+    .todo-option {
         display: inline-block;
         vertical-align: top;
         padding: 12px 0 0 2%;
@@ -48,5 +48,13 @@ body {
         i {
             cursor: pointer;
         }
+    }
+}
+
+.todo-done {
+    background: #CCC;
+
+    .todo-content {
+        text-decoration: line-through;
     }
 }

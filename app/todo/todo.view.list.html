@@ -1,3 +1,8 @@
-<div class="todo-list">
-    <my-todo ng-repeat="todo in todoList" todo="todo"></my-todo>
+<div class="row">
+  <div class="col-sm-5">
+    <todo-form data-controller="todoCtrl"></todo-form>
+  </div>
+  <div class="col-sm-7">
+    <my-todo ng-repeat="todo in todoCtrl.todoList"></my-todo>
+  </div>
 </div>

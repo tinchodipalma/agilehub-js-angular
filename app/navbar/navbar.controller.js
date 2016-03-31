@@ -9,13 +9,7 @@
         $scope.links = [
             {
                 title: 'Mi listado',
-                href: '#',
-                isActive: false
-            },
-            {
-                title: 'Editar listado',
-                href: '#/edit',
-                isActive: true
+                state: 'list'
             }
         ];
     }
