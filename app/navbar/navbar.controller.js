@@ -5,7 +5,7 @@
 
     NavBarController.$inject = ['$scope'];
     function NavBarController($scope) {
-        $scope.brand = 'Tincho';
+        $scope.brand = '#ToDo AngularJS';
         $scope.links = [
             {
                 title: 'Mi listado',

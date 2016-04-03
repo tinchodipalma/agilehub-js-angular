@@ -1,21 +1,21 @@
-<div class="todo-object" data-ng-class="{'todo-done': todo.done}">
+<div class="todo-object" data-ng-class="{'todo-done': todo.isDone()}">
     <div class="todo-check">
-        <input type="checkbox" name="todo.id" value="1" data-ng-model="todo.done">
+        <input type="checkbox" name="todo.id" value="1" ng-click="todoCtrl.toggleStatus(todo)" ng-checked="todo.isDone()">
     </div>
     <div class="todo-content">
         <div class="todo-title">
-            {{todo.title | uppercase }}
+            {{todo.name | uppercase }}
         </div>
         <div class="todo-description">
             {{todo.description}}
         </div>
     </div>
-    <div class="todo-option" data-ng-if="!todo.done">
+    <div class="todo-option" data-ng-if="!todo.isDone()">
         <a href="#" data-ui-sref="edit({'id': todo.id, 'todoObj': todo})">
             <i class="glyphicon glyphicon-pencil"></i>
         </a>
     </div>
-    <div class="todo-option" data-ng-if="todo.done">
+    <div class="todo-option" data-ng-if="todo.isDone()">
         <i class="glyphicon glyphicon-remove text-danger" data-ng-click="todoCtrl.remove(todo)"></i>
     </div>
 </div>

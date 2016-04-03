@@ -4,43 +4,59 @@
 		.controller('TodoController', TodoController)
 		.controller('TodoListController', TodoListController);
 
-	TodoListController.$inject = ['$state', '$stateParams'];
-
-	function TodoListController($state, $stateParams) {
-
+    // Agregamos la dependencia 'tasks' proveniente del objeto resolve definido en el router para este estado
+	TodoListController.$inject = ['$http', '$state', '$stateParams', 'tasks'];
+	function TodoListController($http, $state, $stateParams, tasks) {
         var vm = this;
 
         vm.submit = submit;
         vm.remove = remove;
+        vm.toggleStatus = toggleStatus;
 
-        vm.todoList = [
-            {
-                id: 1,
-                title: 'My first todo',
-                description: 'Desc - My first todo',
-                done: true
-            },
-            {
-                id: 2,
-                title: 'My second todo',
-                description: 'Desc - My second todo',
-                done: false
-            }
-        ];
+        // Referenciamos el todoList con los objetos de la respuesta de tasks
+        vm.todoList = getTasks();
 
         vm.todo = {};
 
+        function getTasks() {
+            return tasks.data.objects.map(function(task) {
+                delete task.user;
+                task.status = task.status.id;
+                task.isDone = function() {
+                    return task.status === 2;
+                };
+                return task;
+            });
+        }
+
         function submit (form) {
             if (form.$valid) {
-                vm.todoList.push(vm.todo);
-                vm.todo = {};
+                $http.post('http://localhost:8000/api/v1/tasks/', vm.todo)
+                    .then(function(response) {
+                        vm.todo.id = response.data.id
+                        vm.todoList.push(vm.todo);
+                        vm.todo = {};
+                    });
             }
         }
 
         function remove (todo) {
-            vm.todoList = vm.todoList.filter(function (todoObj) {
-               return todoObj.id !== todo.id;
-            });
+            $http.delete('http://localhost:8000/api/v1/tasks/' + todo.id + '/')
+                .then(function(response) {
+                    console.log(response);
+                    vm.todoList = vm.todoList.filter(function (todoObj) {
+                       return todoObj.id !== todo.id;
+                    });
+                });
+
+        }
+
+        function toggleStatus(todo) {
+            todo.status = todo.status === 1 ? 2 : 1;
+            $http.patch('http://localhost:8000/api/v1/tasks/' + todo.id + '/', todo)
+                .then(function(response) {
+                    console.log(response);
+                });
         }
 
         if (!!$stateParams.todoObj) {
@@ -53,9 +69,9 @@
         }
 	}
 
-	TodoController.$inject = ['$state', '$stateParams'];
+	TodoController.$inject = ['$http', '$state', '$stateParams'];
 
-	function TodoController($state, $stateParams) {
+	function TodoController($http, $state, $stateParams) {
 
         var vm = this;
 
@@ -69,7 +85,11 @@
 
         function submit (form) {
             if (form.$valid) {
-                $state.go('list', {todoObj: vm.todo});
+                $http.patch('http://localhost:8000/api/v1/tasks/' + vm.todo.id + '/', vm.todo)
+                    .then(function(response) {
+                        console.log(response);
+                        $state.go('list', {todoObj: vm.todo});
+                    });
             }
         }
 	}

@@ -16,6 +16,14 @@
                 params: {
                     todoObj: null
                 },
+                resolve: {
+                    tasks: function($http) {
+                        return $http.get('http://localhost:8000/api/v1/tasks/')
+                            .then(function(response) {
+                                return response;
+                            })
+                    }
+                },
                 templateUrl: "/app/todo/todo.view.list.html",
                 controller: 'TodoListController',
                 controllerAs: 'todoCtrl'
