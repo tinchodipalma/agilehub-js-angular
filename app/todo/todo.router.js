@@ -3,9 +3,10 @@
 	angular.module('todo')
 		.config(TodoConfiguration);
 
-	TodoConfiguration.$inject = ['$stateProvider', '$urlRouterProvider'];
+	TodoConfiguration.$inject = ['$stateProvider', '$urlRouterProvider', 'todoConfig'];
 
-	function TodoConfiguration($stateProvider, $urlRouterProvider) {
+	function TodoConfiguration($stateProvider, $urlRouterProvider, todoConfig) {
+        // $httpProvider.defaults.headers.common.Authorization = 'Basic dGluY2hvOmNvMzluYXJ0b2U=';
 		// Para cualquier URL incorrecta
 		$urlRouterProvider.otherwise("/");
 
@@ -18,8 +19,13 @@
                 },
                 resolve: {
                     tasks: function($http) {
-                        return $http.get('http://localhost:8000/api/v1/tasks/')
+                        return $http.get(todoConfig.url + 'tasks/')
                             .then(function(response) {
+                                tincho = response;
+                                return response;
+                            },
+                            function(response) {
+                                console.log(response);
                                 return response;
                             })
                     }

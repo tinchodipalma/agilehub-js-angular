@@ -5,8 +5,8 @@
 		.controller('TodoListController', TodoListController);
 
     // Agregamos la dependencia 'tasks' proveniente del objeto resolve definido en el router para este estado
-	TodoListController.$inject = ['$http', '$state', '$stateParams', 'tasks'];
-	function TodoListController($http, $state, $stateParams, tasks) {
+	TodoListController.$inject = ['$http', '$state', '$stateParams', 'todoConfig', 'tasks'];
+	function TodoListController($http, $state, $stateParams, todoConfig, tasks) {
         var vm = this;
 
         vm.submit = submit;
@@ -31,7 +31,7 @@
 
         function submit (form) {
             if (form.$valid) {
-                $http.post('http://localhost:8000/api/v1/tasks/', vm.todo)
+                $http.post(todoConfig.url + 'tasks/', JSON.stringify(vm.todo))
                     .then(function(response) {
                         vm.todo.id = response.data.id
                         vm.todoList.push(vm.todo);
@@ -41,7 +41,7 @@
         }
 
         function remove (todo) {
-            $http.delete('http://localhost:8000/api/v1/tasks/' + todo.id + '/')
+            $http.delete(todoConfig.url + 'tasks/' + todo.id + '/')
                 .then(function(response) {
                     console.log(response);
                     vm.todoList = vm.todoList.filter(function (todoObj) {
@@ -53,7 +53,7 @@
 
         function toggleStatus(todo) {
             todo.status = todo.status === 1 ? 2 : 1;
-            $http.patch('http://localhost:8000/api/v1/tasks/' + todo.id + '/', todo)
+            $http.patch(todoConfig.url + 'tasks/' + todo.id + '/', todo)
                 .then(function(response) {
                     console.log(response);
                 });
@@ -69,9 +69,9 @@
         }
 	}
 
-	TodoController.$inject = ['$http', '$state', '$stateParams'];
+	TodoController.$inject = ['$http', '$state', '$stateParams', 'todoConfig'];
 
-	function TodoController($http, $state, $stateParams) {
+	function TodoController($http, $state, $stateParams, todoConfig) {
 
         var vm = this;
 
@@ -85,7 +85,7 @@
 
         function submit (form) {
             if (form.$valid) {
-                $http.patch('http://localhost:8000/api/v1/tasks/' + vm.todo.id + '/', vm.todo)
+                $http.patch(todoConfig.url + 'tasks/' + vm.todo.id + '/', vm.todo)
                     .then(function(response) {
                         console.log(response);
                         $state.go('list', {todoObj: vm.todo});
