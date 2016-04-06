@@ -4,29 +4,45 @@
 		.controller('TodoController', TodoController)
 		.controller('TodoListController', TodoListController);
 
-    // Agregamos la dependencia 'tasks' proveniente del objeto resolve definido en el router para este estado
-	TodoListController.$inject = ['$http', '$state', '$stateParams', 'todoConfig', 'tasks'];
-	function TodoListController($http, $state, $stateParams, todoConfig, tasks) {
+	TodoListController.$inject = ['$http', '$state', '$stateParams', 'todoConfig'];
+	function TodoListController($http, $state, $stateParams, todoConfig) {
         var vm = this;
+
+        vm.todoList = [];
+        vm.todo = {};
+        vm.inProgress = false;
 
         vm.submit = submit;
         vm.remove = remove;
         vm.toggleStatus = toggleStatus;
 
-        // Referenciamos el todoList con los objetos de la respuesta de tasks
-        vm.todoList = getTasks();
-
-        vm.todo = {};
+        getTasks().then(function(tasks) {
+            vm.inProgress = false;
+            vm.todoList = tasks;
+            if (!!$stateParams.todoObj) {
+                for (var i = 0; i < vm.todoList.length; i++) {
+                    if (vm.todoList[i].id === $stateParams.todoObj.id) {
+                        vm.todoList[i] = $stateParams.todoObj;
+                        break;
+                    }
+                }
+            }
+        });
 
         function getTasks() {
-            return tasks.data.objects.map(function(task) {
-                delete task.user;
-                task.status = task.status.id;
-                task.isDone = function() {
-                    return task.status === 2;
-                };
-                return task;
-            });
+            vm.inProgress = true;
+
+            return $http.get(todoConfig.url + 'tasks/')
+                .then(function(response) {
+                    return response.data.objects.map(function(task) {
+                        delete task.user;
+                        task.status = task.status.id;
+                        task.isDone = function() {
+                            return task.status === 2;
+                        };
+                        return task;
+                    });
+                })
         }
 
         function submit (form) {
@@ -57,15 +73,6 @@
                 .then(function(response) {
                     console.log(response);
                 });
-        }
-
-        if (!!$stateParams.todoObj) {
-            for (var i = 0; i < vm.todoList.length; i++) {
-                if (vm.todoList[i].id === $stateParams.todoObj.id) {
-                    vm.todoList[i] = $stateParams.todoObj;
-                    break;
-                }
-            }
         }
 	}
 

@@ -17,19 +17,6 @@
                 params: {
                     todoObj: null
                 },
-                resolve: {
-                    tasks: function($http) {
-                        return $http.get(todoConfig.url + 'tasks/')
-                            .then(function(response) {
-                                tincho = response;
-                                return response;
-                            },
-                            function(response) {
-                                console.log(response);
-                                return response;
-                            })
-                    }
-                },
                 templateUrl: "/app/todo/todo.view.list.html",
                 controller: 'TodoListController',
                 controllerAs: 'todoCtrl'
