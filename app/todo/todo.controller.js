@@ -29,18 +29,22 @@
             }
         });
 
+        function cleanTask(task) {
+            delete task.user;
+            task.status = !!task.status && !!task.status.id ? task.status.id : 1;
+            task.isDone = function() {
+                return task.status === 2;
+            };
+            return task;
+        }
+
         function getTasks() {
             vm.inProgress = true;
 
             return $http.get(todoConfig.url + 'tasks/')
                 .then(function(response) {
                     return response.data.objects.map(function(task) {
-                        delete task.user;
-                        task.status = task.status.id;
-                        task.isDone = function() {
-                            return task.status === 2;
-                        };
-                        return task;
+                        return cleanTask(task);
                     });
                 })
         }
@@ -49,7 +53,8 @@
             if (form.$valid) {
                 $http.post(todoConfig.url + 'tasks/', JSON.stringify(vm.todo))
                     .then(function(response) {
-                        vm.todo.id = response.data.id
+                        vm.todo.id = response.data.id;
+                        vm.todo = cleanTask(vm.todo);
                         vm.todoList.push(vm.todo);
                         vm.todo = {};
                     });
