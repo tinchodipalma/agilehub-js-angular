@@ -4,8 +4,8 @@
 		.controller('TodoController', TodoController)
 		.controller('TodoListController', TodoListController);
 
-	TodoListController.$inject = ['$http', '$state', '$stateParams', 'todoConfig'];
-	function TodoListController($http, $state, $stateParams, todoConfig) {
+	TodoListController.$inject = ['$http', '$state', '$stateParams', 'todoConfig', 'TodoFactory'];
+	function TodoListController($http, $state, $stateParams, todoConfig, TodoFactory) {
         var vm = this;
 
         vm.todoList = [];
@@ -29,35 +29,18 @@
             }
         });
 
-        function cleanTask(task) {
-            delete task.user;
-            task.status = !!task.status && !!task.status.id ? task.status.id : 1;
-            task.isDone = function() {
-                return task.status === 2;
-            };
-            return task;
-        }
-
         function getTasks() {
             vm.inProgress = true;
-
-            return $http.get(todoConfig.url + 'tasks/')
-                .then(function(response) {
-                    return response.data.objects.map(function(task) {
-                        return cleanTask(task);
-                    });
-                })
+            return TodoFactory.getTasks()
         }
 
         function submit (form) {
             if (form.$valid) {
-                $http.post(todoConfig.url + 'tasks/', JSON.stringify(vm.todo))
-                    .then(function(response) {
-                        vm.todo.id = response.data.id;
-                        vm.todo = cleanTask(vm.todo);
-                        vm.todoList.push(vm.todo);
+                TodoFactory.addTask(vm.todo)
+                    .then(function(responseTodo) {
                         vm.todo = {};
-                    });
+                        vm.todoList.push(responseTodo);
+                    })
             }
         }
 
@@ -81,9 +64,9 @@
         }
 	}
 
-	TodoController.$inject = ['$http', '$state', '$stateParams', 'todoConfig'];
+	TodoController.$inject = ['$http', '$state', '$stateParams', 'todoConfig', 'TodoFactory'];
 
-	function TodoController($http, $state, $stateParams, todoConfig) {
+	function TodoController($http, $state, $stateParams, todoConfig, TodoFactory) {
 
         var vm = this;
 
@@ -97,9 +80,8 @@
 
         function submit (form) {
             if (form.$valid) {
-                $http.patch(todoConfig.url + 'tasks/' + vm.todo.id + '/', vm.todo)
-                    .then(function(response) {
-                        console.log(response);
+                TodoFactory.editTask(vm.todo)
+                    .then(function() {
                         $state.go('list', {todoObj: vm.todo});
                     });
             }
