@@ -7,7 +7,6 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var connect = require('gulp-connect');
-var watch = require('gulp-watch');
 
 // Link task
 gulp.task('lint', function() {

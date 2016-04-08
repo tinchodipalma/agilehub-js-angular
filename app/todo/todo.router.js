@@ -3,9 +3,10 @@
 	angular.module('todo')
 		.config(TodoConfiguration);
 
-	TodoConfiguration.$inject = ['$stateProvider', '$urlRouterProvider'];
+	TodoConfiguration.$inject = ['$stateProvider', '$urlRouterProvider', 'todoConfig'];
 
-	function TodoConfiguration($stateProvider, $urlRouterProvider) {
+	function TodoConfiguration($stateProvider, $urlRouterProvider, todoConfig) {
+        // $httpProvider.defaults.headers.common.Authorization = 'Basic dGluY2hvOmNvMzluYXJ0b2U=';
 		// Para cualquier URL incorrecta
 		$urlRouterProvider.otherwise("/");
 
@@ -17,7 +18,8 @@
                     todoObj: null
                 },
                 templateUrl: "/app/todo/todo.view.list.html",
-                controller: 'TodoListController'
+                controller: 'TodoListController',
+                controllerAs: 'todoCtrl'
             })
             .state('edit', {
                 url: "/edit/:id",
@@ -25,7 +27,8 @@
                     todoObj: null
                 },
                 templateUrl: "/app/todo/todo.view.edit.html",
-                controller: 'TodoController'
+                controller: 'TodoController',
+                controllerAs: 'todoEditCtrl'
             });
 	}
 

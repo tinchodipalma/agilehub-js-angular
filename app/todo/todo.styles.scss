@@ -1,52 +1,101 @@
 body {
-    background: #EFEFEF;
+	background: #EFEFEF;
 }
-
 .my-content {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 }
-
 .todo-list {
-    width: 90%;
-    margin: 20px auto;
-    max-width: 600px;
+	width: 90%;
+	margin: 20px auto;
+	max-width: 600px;
 }
-
 .todo-object {
-    background: #FDFDFD;
-    margin: 10px auto;
-    width: 100%;
-    border: 2px solid #DDD;
-
-    .todo-check {
-        vertical-align: top;
-        display: inline-block;
-        padding: 10px 10px 10px 15px;
-        text-align: center;
+	background: #FDFDFD;
+	margin: 0 auto 10px;
+	width: 100%;
+	border: 2px solid #DDD;
+	.todo-check {
+		vertical-align: top;
+		display: inline-block;
+		padding: 10px 10px 10px 15px;
+		text-align: center;
+	}
+	.todo-content {
+		width: 85%;
+		right: 0;
+		text-indent: 2%;
+		display: inline-block;
+		border-left: 2px solid #DDD;
+		.todo-title {
+			color: #33A;
+			font-weight: bold;
+			border-bottom: 1px solid #DDD;
+		}
+	}
+	.todo-option {
+		display: inline-block;
+		vertical-align: top;
+		padding: 12px 0 0 2%;
+		i {
+			cursor: pointer;
+		}
+	}
+}
+.todo-done {
+	background: #CCC;
+	.todo-content {
+		text-decoration: line-through;
+	}
+}
+.container .jumbotron {
+	background: #FAFAFA;
+	border: 1px solid #DADADA;
+    overflow: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    h1 {
+        margin-top: -20px;
+        margin-bottom: 20px;
     }
+}
+.spinner-container {
+    position: relative;
+    text-align: center;
+    margin: 0 auto 10vh;
 
-    .todo-content {
-        width: 85%;
-        right: 0;
-        text-indent: 2%;
-        display: inline-block;
-        border-left: 2px solid #DDD;
-
-        .todo-title {
-            color: #33A;
-            font-weight: bold;
-            border-bottom: 1px solid #DDD;
-        }
-    }
-
-    .todo-edit {
-        display: inline-block;
-        vertical-align: top;
-        padding: 12px 0 0 2%;
-
-        i {
-            cursor: pointer;
-        }
-    }
+	.leftEye,
+	.rightEye {
+		width: 5vh;
+		height: 5vh;
+		border-radius: 50%;
+		background: black;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%);
+		-webkit-animation: leftEyeAnimation 3s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+		animation: leftEyeAnimation 3s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+	}
+	.rightEye {
+		-webkit-animation: rightEyeAnimation 3s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+		animation: rightEyeAnimation 3s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+	}
+	.mouth {
+		width: 10vh;
+		height: 10vh;
+		border-radius: 50%;
+		border: solid 1.3vh black;
+		border-right: solid 1.3vh rgba(223,223,194,0);
+		border-left: solid 1.3vh rgba(223,223,194,0);
+		border-bottom: solid 1.3vh rgba(223,223,194,0);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%, -50%) rotate(360deg);
+		transform: translate(-50%, -50%) rotate(360deg);
+		-webkit-animation: mouthAnimation 3s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+		animation: mouthAnimation 3s infinite cubic-bezier(0.455, 0.03, 0.515, 0.955);
+	}
 }

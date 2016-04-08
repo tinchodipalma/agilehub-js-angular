@@ -1,29 +1,48 @@
 (function(window, angular) {
 
     angular.module('todo')
-        .directive('myTodo', MyTodo);
+        .directive('todoItem', TodoItem)
+        .directive('todoSpinner', TodoSpinner)
+        .directive('todoEmptyMessage', TodoEmptyMessage)
+        .directive('todoForm', TodoForm);
 
-    MyTodo.$inject = ['$state'];
-    function MyTodo($state) {
+    TodoItem.$inject = ['$state'];
+    function TodoItem($state) {
         return {
             restric: 'EA',
-            scope: {
-                todo: '='
-            },
-            link: MyTodoCompile,
-            templateUrl: function(element, attributes) {
-                var type = !attributes.edit ? 'view' : 'edit';
-                return '/app/todo/todo.template.' + type + '.html';
-            }
+            scope: false,
+            link: TodoItemLink,
+            templateUrl: '/app/todo/templates/todo.item.template.html'
         };
 
-        function MyTodoCompile(scope, element, attrs) {
-            scope.edit = function edit(todoObj) {
-                $state.go('edit', { id: todoObj.id, todoObj: todoObj });
-            };
+        function TodoItemLink(scope, element, attrs) {
             scope.close = function close(todoObj) {
                 $state.go('list', { todoObj: todoObj });
             };
+        }
+    }
+
+    function TodoForm() {
+        return {
+            restrict: 'E',
+            templateUrl: '/app/todo/templates/todo.form.template.html',
+            scope: {
+                todoForm: '=controller'
+            }
+        }
+    }
+
+    function TodoSpinner() {
+        return {
+            restrict: 'E',
+            templateUrl: '/app/todo/templates/todo.spinner.template.html'
+        }
+    }
+
+    function TodoEmptyMessage() {
+        return {
+            restrict: 'E',
+            templateUrl: '/app/todo/templates/todo.emptyMessage.template.html'
         }
     }
 
